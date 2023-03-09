@@ -1,33 +1,49 @@
-import styles from './Pokes.module.css'
-import Image from 'next/image'
-import Link from 'next/link'
+'use client'
+import { useState, useEffect } from 'react'
+import styles from './randomPokemons/Pokes.module.css'
+import PokeCard from './components/PokeCard'
+import { v4 as uuidv4 } from "uuid";
 
+const Home = () => {
 
-const pokeData = async() => {
-  const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${Math.floor(Math.random() * 101)}`, {cache: 'no-store'})  //id or name can be fetched
-  return res.json()
+    const [pokemons, setPokemons] = useState([])
+
+    const pokeData = async() => {
+        let data = []
+        try {
+            const res = await fetch('https://pokeapi.co/api/v2/pokemon?limit=200&offset=1', {cache: 'no-store'})
+            if(!res.ok){
+                throw new Error('Bad response', {
+                    cause: { res }
+                })
+            }
+
+            data = await res.json()
+        } catch (err) {
+            console.log(err)
+        }
+        
+        return data
+    }
+
+    
+    useEffect(() => {
+        const fetchPokemons = async() => {
+            const res = await pokeData()
+            setPokemons(res.results)
+        }
+
+        fetchPokemons()
+    }, [])
+
+    return (
+        <div className={styles.main}>
+            {pokemons.map(({name, url}, index) => (
+                <PokeCard id={index} name={name} key={uuidv4()} />
+            ))}
+
+        </div>
+    )
 }
-
-export default async function Home() {
-
-  let data = []
-
-  for(let i=0;i<20;i++){
-    data.push(await pokeData())
-  }
-
-  return (
-    <div className={styles.main}>
-
-      {data.map(poke => (
-        <Link href={'/${name}'} as={`/${poke.name}`} key={poke.id}>
-          <div className={styles.card} >
-            <h2 className={styles.title}>{poke.name}</h2>
-            <Image className={styles.image} alt={poke.name} width={150} height={150} src={poke.sprites.front_default} />
-          </div>
-        </Link>
-      ))}
-
-    </div>
-  )
-}
+ 
+export default Home

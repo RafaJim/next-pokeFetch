@@ -1,4 +1,6 @@
 import './globals.css'
+import NavBar from './components/NavBar'
+import SearchBar from './components/SearchBar'
 
 export const metadata = {
   title: 'Pokemon Data',
@@ -8,7 +10,10 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <NavBar />
+        {children}
+      </body>
     </html>
   )
 }

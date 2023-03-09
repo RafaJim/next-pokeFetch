@@ -1,12 +1,13 @@
 .body{
     display: flex;
     margin: auto;
+    margin-top: 20px;
     padding: 30px;
     width: 65%;
     min-height: 70%;
     background: #202124;
     justify-content: space-evenly;
-    border-radius: 7px;
+    border-radius: 9px;
 }
 
 .text{
@@ -22,17 +23,4 @@
 .info{
     font-family: sans-serif;
     margin: auto;
-}
-
-.btnExit{
-    background: red;
-    border-radius: 7px;
-    border: none;
-    color: #fff;
-    width: 90px;
-    height: 45px;
-    font-size: medium;
-    margin-left: 330px;
-    margin-top: 20px;
-    cursor: pointer;
 }

@@ -15,8 +15,6 @@ const PokeInfo = ({params}) => {
         return res.json()
     }
     
-    console.log(pokeInfo)
-    
     useEffect(() => {
         const fetchInfo = async() => {
             const res = await pokeData()
@@ -27,9 +25,6 @@ const PokeInfo = ({params}) => {
 
     return (
         <>
-            <Link href={'/'} as={'/'}>
-                <button className={styles.btnExit}>Return</button>
-            </Link>
             <div className={styles.body}>
                 <div>
                     {pokeInfo ? <Image alt={params.name} width={350} height={350} src={pokeInfo.sprites.front_default} />:null }
