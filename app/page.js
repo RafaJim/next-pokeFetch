@@ -8,6 +8,7 @@ const Home = () => {
 
     const [pokemons, setPokemons] = useState([])
     const [filteredPokemons, setFilteredPokemons] = useState([])
+    const [pokeSearch, setPokeSearch] = useState(false)
 
     const pokeData = async() => {
         let data = []
@@ -47,6 +48,9 @@ const Home = () => {
             poke.name.includes(name)
         ))
         setFilteredPokemons(filteredPokes)
+
+        let findPoke = pokemons.filter(poke => poke.name === name)
+        if(findPoke.length === 1) setPokeSearch(true)
     }
 
     
@@ -56,7 +60,7 @@ const Home = () => {
 
     return (
         <div className={styles.body}>
-            <SearchBar filter={filter} />
+            <SearchBar pokeFinded={pokeSearch} filter={filter} />
 
             <div className={styles.main}>
                 {filteredPokemons.map(({name, id}) => (
