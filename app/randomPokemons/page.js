@@ -1,30 +1,53 @@
+'use client'
+
 import styles from './Pokes.module.css'
-import Image from 'next/image'
-import Link from 'next/link'
+import PokeCard from '../components/PokeCard'
+import { useState, useEffect } from 'react'
 
-const pokeData = async() => {
-  const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${Math.floor(Math.random() * 101)}`, {cache: 'no-store'})  //id or name can be fetched
-  return res.json()
-}
+export default function RandomPokemons() {
 
-export default async function Home() {
+  const [pokemons, setPokemons] = useState([])
+  
+  const generateRandomNums = () => {
+    let numbers = []
+    while(numbers.length < 20){
+      let id = Math.floor(Math.random() * 1001)
 
-  let data = []
+      if(id === 0) id + 2
+      if(id === 1) id + 1
+      if(numbers.indexOf(id) === -1)  numbers.push(id)
 
-  for(let i=0;i<20;i++){
-    data.push(await pokeData())
+    }
+    return numbers
   }
+
+  const getRandomPoke = async(ids) => {
+    let pokes = []
+    let res = []
+
+    for(let i=0; i<20;i++){
+      const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${ids[i]}`, {cache: 'no-store'})  //id or name can be fetched
+      pokes.push(await res.json())
+    }
+
+    pokes.forEach(poke => (
+      res.push({
+        name: poke.name,
+        id: poke.id
+      })
+    ))
+
+    setPokemons(res)
+  }
+
+  useEffect(() => {
+    getRandomPoke(generateRandomNums())
+  }, [])
 
   return (
     <div className={styles.main}>
-
-      {data.map(poke => (
-        <Link href={`/randomPokemons/${poke.name}`} key={poke.id}>
-          <div className={styles.card} >
-            <h2 className={styles.title}>{poke.name}</h2>
-            <Image className={styles.image} alt={poke.name} width={150} height={150} src={poke.sprites.front_default} />
-          </div>
-        </Link>
+      {pokemons.map(({name, id}) => (
+          <PokeCard name={name} id={id} key={id} />
       ))}
 
     </div>

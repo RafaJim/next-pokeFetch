@@ -2,11 +2,12 @@
 import { useState, useEffect } from 'react'
 import styles from './randomPokemons/Pokes.module.css'
 import PokeCard from './components/PokeCard'
-import { v4 as uuidv4 } from "uuid";
+import SearchBar from './components/SearchBar';
 
 const Home = () => {
 
     const [pokemons, setPokemons] = useState([])
+    const [filteredPokemons, setFilteredPokemons] = useState([])
 
     const pokeData = async() => {
         let data = []
@@ -25,23 +26,44 @@ const Home = () => {
         
         return data
     }
+    
+    const fetchPokemons = async() => {
+        const res = await pokeData()
+        let arr = []
+
+        res.results.forEach((poke, index) => (
+            arr.push({
+                name: poke.name,
+                id: index + 2
+            })
+        ))
+        
+        setPokemons(arr)
+        setFilteredPokemons(arr)
+    }
+
+    const filter = (name) => {
+        const filteredPokes = pokemons.filter(poke => (
+            poke.name.includes(name)
+        ))
+        setFilteredPokemons(filteredPokes)
+    }
 
     
     useEffect(() => {
-        const fetchPokemons = async() => {
-            const res = await pokeData()
-            setPokemons(res.results)
-        }
-
         fetchPokemons()
     }, [])
 
     return (
-        <div className={styles.main}>
-            {pokemons.map(({name, url}, index) => (
-                <PokeCard id={index} name={name} key={uuidv4()} />
-            ))}
+        <div className={styles.body}>
+            <SearchBar filter={filter} />
 
+            <div className={styles.main}>
+                {filteredPokemons.map(({name, id}) => (
+                    <PokeCard name={name} id={id} key={id} />
+                ))}
+
+            </div>
         </div>
     )
 }

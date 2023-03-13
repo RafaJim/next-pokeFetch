@@ -1,4 +1,10 @@
 .bus{
-    border-radius: 5px;
+    width: 250px;
+    height: 40px;    
+    border-radius: 15px;
     border: 2px solid #fff;
+    margin: auto;
+    margin-top: 15px;
+    font-size: 20px;
+    padding: 10px;
 }

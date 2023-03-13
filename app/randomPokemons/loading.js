@@ -1,7 +1,7 @@
 const Loading = () => {
     return (
         <h1>
-            Cargado pokemones...
+            Loading pokemons...
         </h1>
     )
 }
