@@ -22,22 +22,21 @@ export default function RandomPokemons() {
   }
 
   const getRandomPoke = async(ids) => {
-    let pokes = []
-    let res = []
-
-    for(let i=0; i<20;i++){
-      const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${ids[i]}`, {cache: 'no-store'})  //id or name can be fetched
-      pokes.push(await res.json())
-    }
-
-    pokes.forEach(poke => (
-      res.push({
-        name: poke.name,
-        id: poke.id
-      })
+    const promises = ids.map(id => (
+      fetch(`https://pokeapi.co/api/v2/pokemon/${id}`, {cache: 'no-store'})
     ))
 
-    setPokemons(res)
+    Promise.all(promises)
+    .then(res => Promise.all(res.map(r => r.json())))
+    .then(data => {setPokemons(
+      data.map(poke => (
+        {
+          name: poke.name,
+          id: poke.id
+        }
+      ))
+    )})
+    
   }
 
   useEffect(() => {
